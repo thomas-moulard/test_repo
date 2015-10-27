@@ -11,8 +11,8 @@ if(NOT Poco_FOUND)
   # If Poco was not found, extract and install the embedded copy of poco-1.6.1
   include(ExternalProject)
   ExternalProject_Add(poco-1.6.1
-    URL "${CMAKE_CURRENT_SOURCE_DIR}/vendor/poco-poco-1.6.1-release-osrf-repack.tar.gz"
-    URL_MD5 2cdfedbd6b5fcd46a2bd57021f0acae0
+    URL https://github.com/pocoproject/poco/archive/poco-1.6.1-release.tar.gz
+    URL_MD5 208872b13d282dfb0f0580fc11df96f3
     CMAKE_ARGS
       -DENABLE_XML:BOOL=OFF
       -DENABLE_JSON:BOOL=OFF
