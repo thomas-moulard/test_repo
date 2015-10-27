@@ -33,4 +33,12 @@ if(NOT Poco_FOUND)
   install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/poco_install/ DESTINATION ${CMAKE_INSTALL_PREFIX})
 endif()
 
+configure_file(poco_vendorConfig.cmake.in "${PROJECT_BINARY_DIR}/poco_vendorConfig.cmake" @ONLY)
+configure_file(poco_vendorConfig-version.cmake.in "${PROJECT_BINARY_DIR}/poco_vendorConfig-version.cmake" @ONLY)
+
 install(DIRECTORY cmake DESTINATION share/${PROJECT_NAME})
+
+install(FILES
+  "${PROJECT_BINARY_DIR}/poco_vendorConfig.cmake"
+  "${PROJECT_BINARY_DIR}/poco_vendorConfig-version.cmake"
+  DESTINATION share/${PROJECT_NAME}/cmake)
