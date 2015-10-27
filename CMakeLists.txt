@@ -12,7 +12,7 @@ if(NOT Poco_FOUND)
   include(ExternalProject)
   ExternalProject_Add(poco-1.6.1
     URL "${CMAKE_CURRENT_SOURCE_DIR}/vendor/poco-poco-1.6.1-release-osrf-repack.tar.gz"
-    URL_MD5 2fafcd519ab95eb9fb00c1232d646ba8
+    URL_MD5 2cdfedbd6b5fcd46a2bd57021f0acae0
     CMAKE_ARGS
       -DENABLE_XML:BOOL=OFF
       -DENABLE_JSON:BOOL=OFF
