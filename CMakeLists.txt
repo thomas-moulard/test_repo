@@ -9,6 +9,10 @@ find_package(Poco COMPONENTS Foundation)
 
 if(NOT Poco_FOUND)
   # If Poco was not found, extract and install the embedded copy of poco-1.6.1
+  set(extra_cmake_args)
+  if(DEFINED CMAKE_BUILD_TYPE)
+    set(extra_cmake_args -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+  endif()
   include(ExternalProject)
   ExternalProject_Add(poco-1.6.1
     URL https://github.com/pocoproject/poco/archive/poco-1.6.1-release.tar.gz
@@ -26,6 +30,7 @@ if(NOT Poco_FOUND)
       -DENABLE_PAGECOMPILER:BOOL=OFF
       -DENABLE_PAGECOMPILER_FILE2PAGE:BOOL=OFF
       -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/poco_install
+      ${extra_cmake_args}
       -Wno-dev
   )
 
