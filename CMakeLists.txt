@@ -8,15 +8,15 @@ list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
 find_package(Poco COMPONENTS Foundation)
 
 if(NOT Poco_FOUND)
-  # If Poco was not found, extract and install the embedded copy of poco-1.6.1
+  # If Poco was not found, download and build from source
   set(extra_cmake_args)
   if(DEFINED CMAKE_BUILD_TYPE)
     set(extra_cmake_args -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
   endif()
   include(ExternalProject)
-  ExternalProject_Add(poco-1.6.1
-    URL https://github.com/pocoproject/poco/archive/poco-1.6.1-release.tar.gz
-    URL_MD5 208872b13d282dfb0f0580fc11df96f3
+  ExternalProject_Add(poco-1.7.6
+    URL https://github.com/pocoproject/poco/archive/poco-1.7.6-release.tar.gz
+    URL_MD5 53dce82527f165f14af78689a8188891
     CMAKE_ARGS
       -DENABLE_XML:BOOL=OFF
       -DENABLE_JSON:BOOL=OFF
