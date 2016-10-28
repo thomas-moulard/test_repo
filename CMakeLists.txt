@@ -11,7 +11,12 @@ if(NOT Poco_FOUND)
   # If Poco was not found, download and build from source
   set(extra_cmake_args)
   if(DEFINED CMAKE_BUILD_TYPE)
-    set(extra_cmake_args -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+    list(APPEND extra_cmake_args -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+  endif()
+  if(WIN32)
+    list(APPEND extra_cmake_args "-DCMAKE_CXX_FLAGS=/wd4244 /wd4530 /wd4577")
+  else()
+    list(APPEND extra_cmake_args -DCMAKE_C_FLAGS="-Wno-shift-negative-value")
   endif()
   include(ExternalProject)
   ExternalProject_Add(poco-1.7.6
