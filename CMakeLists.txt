@@ -36,6 +36,7 @@ if(NOT Poco_FOUND)
       -DENABLE_UTIL:BOOL=OFF
       -DENABLE_XML:BOOL=OFF
       -DENABLE_ZIP:BOOL=OFF
+      -DPOCO_UNBUNDLED:BOOL=ON
       -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/poco_install
       ${extra_cmake_args}
       -Wno-dev
