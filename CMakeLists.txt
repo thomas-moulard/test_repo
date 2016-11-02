@@ -16,7 +16,9 @@ if(NOT Poco_FOUND)
   if(WIN32)
     list(APPEND extra_cmake_args "-DCMAKE_CXX_FLAGS=/wd4244 /wd4530 /wd4577")
   else()
-    list(APPEND extra_cmake_args -DCMAKE_C_FLAGS="-Wno-shift-negative-value")
+    list(APPEND extra_cmake_args
+      -DPOCO_UNBUNDLED:BOOL=ON
+      -DCMAKE_C_FLAGS="-Wno-shift-negative-value")
   endif()
   include(ExternalProject)
   ExternalProject_Add(poco-1.7.6
@@ -36,7 +38,6 @@ if(NOT Poco_FOUND)
       -DENABLE_UTIL:BOOL=OFF
       -DENABLE_XML:BOOL=OFF
       -DENABLE_ZIP:BOOL=OFF
-      -DPOCO_UNBUNDLED:BOOL=ON
       -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/poco_install
       ${extra_cmake_args}
       -Wno-dev
