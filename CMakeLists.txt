@@ -17,6 +17,7 @@ if(NOT Poco_FOUND)
     list(APPEND extra_cmake_args "-DCMAKE_CXX_FLAGS=/wd4244 /wd4530 /wd4577")
   else()
     list(APPEND extra_cmake_args "-DCMAKE_C_FLAGS=-Wno-shift-negative-value")
+    list(APPEND extra_cmake_args "-DCMAKE_CXX_FLAGS=-std=c++14")
     if(NOT DEFINED CMAKE_TOOLCHAIN_FILE OR NOT ANDROID)
       list(APPEND extra_cmake_args "-DPOCO_UNBUNDLED:BOOL=ON")
     endif()
@@ -48,9 +49,9 @@ if(NOT Poco_FOUND)
     endif()
   endif()
   include(ExternalProject)
-  ExternalProject_Add(poco-1.7.6
-    URL https://github.com/pocoproject/poco/archive/poco-1.7.6-release.tar.gz
-    URL_MD5 53dce82527f165f14af78689a8188891
+  ExternalProject_Add(poco-1.7.7
+    URL https://github.com/pocoproject/poco/archive/poco-1.7.7-release.tar.gz
+    URL_MD5 247b97b545715dc38c8619e412fbcd96
     CMAKE_ARGS
       -DENABLE_CPPUNIT:BOOL=OFF
       -DENABLE_CRYPTO:BOOL=OFF
