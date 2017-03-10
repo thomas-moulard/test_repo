@@ -52,6 +52,7 @@ if(NOT Poco_FOUND)
   ExternalProject_Add(poco-1.7.7
     URL https://github.com/pocoproject/poco/archive/poco-1.7.7-release.tar.gz
     URL_MD5 247b97b545715dc38c8619e412fbcd96
+    TIMEOUT 600
     CMAKE_ARGS
       -DENABLE_CPPUNIT:BOOL=OFF
       -DENABLE_CRYPTO:BOOL=OFF
