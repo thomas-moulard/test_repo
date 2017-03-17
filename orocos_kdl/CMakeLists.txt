@@ -89,6 +89,17 @@ IF( ENABLE_TESTS )
   ENDIF ( CPPUNIT AND CPPUNIT_HEADERS )
 ENDIF(ENABLE_TESTS )
 
+# Disable Windows Compiler warnings
+# see https://msdn.microsoft.com/en-us/library/thxezb7y.aspx
+IF(WIN32)
+  add_definitions(
+    "/W4"
+    "/wd4244"
+    "/wd4267"
+    "/wd4800"
+    "/wd4996")
+endif()
+
 OPTION(ENABLE_EXAMPLES OFF "Enable building of examples")
 
 ADD_SUBDIRECTORY( doc )
