@@ -95,7 +95,7 @@ ENDIF(ENABLE_TESTS )
 # see https://msdn.microsoft.com/en-us/library/thxezb7y.aspx
 IF(WIN32)
   add_definitions(
-    "/W4"
+    "/W3"
     "/wd4244"
     "/wd4267"
     "/wd4800"
