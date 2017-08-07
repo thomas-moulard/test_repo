@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="2">
+  <name>gmock_vendor</name>
+  <version>1.8.0</version>
+  <description>The package provides GoogleMock.</description>
+  <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
+  <license>BSD</license>
+
+  <build_depend>cmake</build_depend>
+
+  <build_export_depend>gtest_vendor</build_export_depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>
