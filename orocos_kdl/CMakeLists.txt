@@ -44,11 +44,11 @@ SET( KDL_CFLAGS "")
 
 find_package(Eigen3 QUIET)
 if(NOT Eigen3_FOUND)
-  message("Did not find Eigen3 on system. Looking manually.")
+  message(STATUS "Did not find Eigen3 on system. Looking manually.")
   include(${PROJ_SOURCE_DIR}/config/FindEigen3.cmake)
 endif()
 set(Eigen_INCLUDE_DIR "${EIGEN3_INCLUDE_DIR}")
-message("Using Eigen3 include dirs: ${Eigen_INCLUDE_DIR}")
+message(STATUS "Using Eigen3 include dirs: ${Eigen_INCLUDE_DIR}")
 include_directories(${Eigen_INCLUDE_DIR})
 SET(KDL_CFLAGS "${KDL_CFLAGS} -I${Eigen_INCLUDE_DIR}")
 
