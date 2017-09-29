@@ -118,6 +118,35 @@ endif()
 # Assume we didn't find it.
 set(Poco_FOUND 0)
 
+# check if found Poco version is at least version 1.4.1p1
+# since older versions don't use recursive mutexes (on Linux)
+if(Poco_INCLUDE_DIR)
+  find_file(
+    Poco_VERSION_FILE NAMES "Version.h"
+    PATHS "${Poco_INCLUDE_DIR}"
+    PATH_SUFFIXES "Poco" "Foundation/include/Poco"
+    DOC "Path of Poco/Version.h file"
+    NO_DEFAULT_PATH
+  )
+  if(NOT Poco_VERSION_FILE)
+    message(STATUS "Found Poco version (< 1.4.0) is too old, building from source instead")
+    unset(Poco_INCLUDE_DIR CACHE)
+  else()
+    file(
+      STRINGS "${Poco_VERSION_FILE}" Poco_VERSION_DEFINE
+      REGEX "#define POCO_VERSION 0x[0-9]+")
+    if(NOT Poco_VERSION_DEFINE)
+      message(FATAL_ERROR "Failed to find '#define POCO_VERSION 0x...' in '${Poco_VERSION_FILE}'")
+    endif()
+    string(SUBSTRING "${Poco_VERSION_DEFINE}" 21 -1 Poco_VERSION_OCT)
+    if("${Poco_VERSION_OCT}" STRLESS "0x01040101")
+      # Poco is too old, build from source instead
+      message(STATUS "Found Poco version ${Poco_VERSION_OCT} is too old, building from source instead")
+      unset(Poco_INCLUDE_DIR CACHE)
+    endif()
+  endif()
+endif()
+
 # Now try to get the include and library path.
 if(Poco_INCLUDE_DIR)
   if(EXISTS "${Poco_INCLUDE_DIR}/Foundation/include/Poco/SharedLibrary.h")
