@@ -7,11 +7,19 @@ set(PACKAGE_VERSION "1.0.0")
 list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
 find_package(Poco COMPONENTS Foundation)
 
-if(NOT Poco_FOUND)
+
+function(get_poco)
+  set(options)
+  set(oneValueArgs BUILD_TYPE)
+  set(multiValueArgs)
+  cmake_parse_arguments(get_poco "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
   # If Poco was not found, download and build from source
   set(extra_cmake_args)
-  if(DEFINED CMAKE_BUILD_TYPE)
-    list(APPEND extra_cmake_args -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+  if(DEFINED get_poco_BUILD_TYPE)
+    list(APPEND extra_cmake_args -DCMAKE_BUILD_TYPE=${get_poco_BUILD_TYPE})
+  else()
+    set(get_poco_BUILD_TYPE "None")
   endif()
   if(WIN32)
     list(APPEND extra_cmake_args "-DCMAKE_CXX_FLAGS=/wd4244 /wd4530 /wd4577")
@@ -32,7 +40,8 @@ if(NOT Poco_FOUND)
         list(APPEND extra_cmake_args "-DANDROID_CPP_FEATURES=${ANDROID_CPP_FEATURES}")
       endif()
       if(DEFINED ANDROID_FUNCTION_LEVEL_LINKING)
-        list(APPEND extra_cmake_args "-DANDROID_FUNCTION_LEVEL_LINKING=${ANDROID_FUNCTION_LEVEL_LINKING}")
+        list(APPEND extra_cmake_args
+          "-DANDROID_FUNCTION_LEVEL_LINKING=${ANDROID_FUNCTION_LEVEL_LINKING}")
       endif()
       if(DEFINED ANDROID_NATIVE_API_LEVEL)
         list(APPEND extra_cmake_args "-DANDROID_NATIVE_API_LEVEL=${ANDROID_NATIVE_API_LEVEL}")
@@ -49,7 +58,7 @@ if(NOT Poco_FOUND)
     endif()
   endif()
   include(ExternalProject)
-  ExternalProject_Add(poco-1.7.7
+  ExternalProject_Add(poco-1.7.7-${get_poco_BUILD_TYPE}
     URL https://github.com/pocoproject/poco/archive/poco-1.7.7-release.tar.gz
     URL_MD5 247b97b545715dc38c8619e412fbcd96
     TIMEOUT 600
@@ -67,17 +76,31 @@ if(NOT Poco_FOUND)
       -DENABLE_UTIL:BOOL=OFF
       -DENABLE_XML:BOOL=OFF
       -DENABLE_ZIP:BOOL=OFF
-      -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/poco_install
+      -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/poco_install_${get_poco_BUILD_TYPE}
       ${extra_cmake_args}
       -Wno-dev
   )
 
   # The external project will install to the build folder, but we'll install that on make install.
-  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/poco_install/ DESTINATION ${CMAKE_INSTALL_PREFIX})
+  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/poco_install_${get_poco_BUILD_TYPE}/
+    DESTINATION ${CMAKE_INSTALL_PREFIX})
+endfunction()
+
+if(NOT Poco_FOUND)
+  # Always build a debug and a release version of poco
+  if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+    get_poco(BUILD_TYPE Release)
+  else()
+    get_poco(BUILD_TYPE Debug)
+  endif()
+
+  get_poco(BUILD_TYPE ${CMAKE_BUILD_TYPE})
 endif()
 
-configure_file(poco_vendorConfig.cmake.in "${PROJECT_BINARY_DIR}/poco_vendorConfig.cmake" @ONLY)
-configure_file(poco_vendorConfig-version.cmake.in "${PROJECT_BINARY_DIR}/poco_vendorConfig-version.cmake" @ONLY)
+configure_file(poco_vendorConfig.cmake.in
+  "${PROJECT_BINARY_DIR}/poco_vendorConfig.cmake" @ONLY)
+configure_file(poco_vendorConfig-version.cmake.in
+  "${PROJECT_BINARY_DIR}/poco_vendorConfig-version.cmake" @ONLY)
 
 install(DIRECTORY cmake DESTINATION share/${PROJECT_NAME})
 
