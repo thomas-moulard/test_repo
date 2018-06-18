@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(poco_vendor)
+project(poco_vendor VERSION "1.0.0")
 
 # Can work with poco 1.4.1p1 (earliest to use recursive mutexes on Linux)
 # 1.6.1 is the first version to ship with PocoConfigVersion.cmake
