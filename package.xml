@@ -4,7 +4,7 @@
   schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>poco_vendor</name>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <description>CMake shim over the poco library.</description>
   <maintainer email="steven@openrobotics.org">Steven! Ragnarök</maintainer>
   <license>Apache License 2.0</license> <!-- The contents of this vendor package are Apache 2.0 -->
