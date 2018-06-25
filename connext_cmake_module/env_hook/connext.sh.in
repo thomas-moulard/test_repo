@@ -66,6 +66,8 @@ else
 fi
 unset _IS_DARWIN
 
+export NDDSHOME="$_NDDSHOME_TO_USE"
+
 unset _Connext_LIBRARY_DIR_TO_USE
 unset _NDDSHOME_TO_USE
 unset _BUILDTIME_NDDSHOME
