@@ -2,6 +2,18 @@
 Changelog for package urdf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.0 (2018-06-25)
+------------------
+* Update project URLs (`#2 <https://github.com/ros2/urdf/issues/2>`_)
+* Contributors: Mikael Arguedas
+
+2.0.0 (2017-12-08)
+------------------
+* Ported to ROS 2
+* Added Windows compatibility
+* Switched to ROS 2 code style
+* Contributors: Chris Lalancette, Mikael Arguedas
+
 1.12.12 (2017-11-08)
 --------------------
 * Switched to package format 2 and made rostest a test_depend (`#221 <https://github.com/ros/robot_model/pull/221>`_)
