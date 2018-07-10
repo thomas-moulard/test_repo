@@ -17,12 +17,12 @@
   <build_export_depend>rosidl_typesupport_introspection_c</build_export_depend>
   <build_export_depend>rosidl_typesupport_introspection_cpp</build_export_depend>
 
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
   <group_depend>rosidl_runtime_packages</group_depend>
   <group_depend>rosidl_typesupport_c_packages</group_depend>
   <group_depend>rosidl_typesupport_cpp_packages</group_depend>
-
-  <test_depend>ament_lint_auto</test_depend>
-  <test_depend>ament_lint_common</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
