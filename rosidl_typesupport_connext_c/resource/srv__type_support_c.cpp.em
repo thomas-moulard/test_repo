@@ -92,7 +92,7 @@ void * create_requester__@(spec.srv_name)(
 }
 const char * destroy_requester__@(spec.srv_name)(
   void * untyped_requester,
-  void (*deallocator)(void *))
+  void (* deallocator)(void *))
 {
   return @(spec.pkg_name)::srv::typesupport_connext_cpp::destroy_requester__@(spec.srv_name)(
     untyped_requester, deallocator);
@@ -104,7 +104,8 @@ int64_t send_request__@(spec.srv_name)(
 {
   using RequesterType = connext::Requester<
     @(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Request_,
-    @(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Response_>;
+    @(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Response_
+  >;
   connext::WriteSample<
     @(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Request_> request;
   const rosidl_message_type_support_t * ts =
@@ -149,7 +150,7 @@ void * create_replier__@(spec.srv_name)(
 
 const char * destroy_replier__@(spec.srv_name)(
   void * untyped_replier,
-  void (*deallocator)(void *))
+  void (* deallocator)(void *))
 {
   return @(spec.pkg_name)::srv::typesupport_connext_cpp::destroy_replier__@(spec.srv_name)(
     untyped_replier, deallocator);
@@ -162,7 +163,8 @@ bool take_request__@(spec.srv_name)(
 {
   using ReplierType = connext::Replier<
     @(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Request_,
-    @(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Response_>;
+    @(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Response_
+  >;
   if (!untyped_replier || !request_header || !untyped_ros_request) {
     return false;
   }
