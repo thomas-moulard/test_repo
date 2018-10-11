@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(rviz_yaml_cpp_vendor)
+project(yaml_cpp_vendor)
 
 find_package(ament_cmake REQUIRED)
 
@@ -50,18 +50,18 @@ macro(build_yaml_cpp)
     DIRECTORY
       ${CMAKE_CURRENT_BINARY_DIR}/yaml_cpp_install/
     DESTINATION
-      ${CMAKE_INSTALL_PREFIX}/opt/rviz_yaml_cpp_vendor
+      ${CMAKE_INSTALL_PREFIX}/opt/yaml_cpp_vendor
   )
 endmacro()
 
 build_yaml_cpp()
 
 if(WIN32)
-  ament_environment_hooks(env_hook/rviz_yaml_cpp_vendor_library_path.bat)
+  ament_environment_hooks(env_hook/yaml_cpp_vendor_library_path.bat)
 else()
-  ament_environment_hooks(env_hook/rviz_yaml_cpp_vendor_library_path.sh)
+  ament_environment_hooks(env_hook/yaml_cpp_vendor_library_path.sh)
 endif()
 
 ament_package(
-  CONFIG_EXTRAS "rviz_yaml_cpp_vendor-extras.cmake.in"
+  CONFIG_EXTRAS "yaml_cpp_vendor-extras.cmake.in"
 )

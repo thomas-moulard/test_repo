@@ -1,7 +1,7 @@
-:: copied from rviz_yaml_cpp_vendor/env_hook/rviz_yaml_cpp_vendor_library_path.bat
+:: copied from yaml_cpp_vendor/env_hook/yaml_cpp_vendor_library_path.bat
 @echo off
 
-call:ament_prepend_unique_value PATH "%AMENT_CURRENT_PREFIX%\opt\rviz_yaml_cpp_vendor\bin"
+call:ament_prepend_unique_value PATH "%AMENT_CURRENT_PREFIX%\opt\yaml_cpp_vendor\bin"
 
 goto:eof
 
