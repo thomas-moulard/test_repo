@@ -36,32 +36,30 @@ endforeach()
 
 set(_output_path "${CMAKE_CURRENT_BINARY_DIR}/rosidl_typesupport_connext_c/${PROJECT_NAME}")
 set(_dds_output_path "${CMAKE_CURRENT_BINARY_DIR}/rosidl_typesupport_connext_cpp/${PROJECT_NAME}")
-set(_generated_msg_files "")
-set(_generated_external_msg_files "")
-set(_generated_srv_files "")
-set(_generated_external_srv_files "")
+set(_generated_files "")
+set(_generated_external_files "")
 foreach(_idl_file ${rosidl_generate_interfaces_IDL_FILES})
+  get_filename_component(_parent_folder "${_idl_file}" DIRECTORY)
+  get_filename_component(_parent_folder "${_parent_folder}" NAME)
   get_filename_component(_extension "${_idl_file}" EXT)
   get_filename_component(_msg_name "${_idl_file}" NAME_WE)
   string_camel_case_to_lower_case_underscore("${_msg_name}" _header_name)
   if(_extension STREQUAL ".msg" AND _msg_name MATCHES "Response$|Request$")
     # Don't do anything
   elseif(_extension STREQUAL ".msg")
-    get_filename_component(_parent_folder "${_idl_file}" DIRECTORY)
-    get_filename_component(_parent_folder "${_parent_folder}" NAME)
-    list(APPEND _generated_external_msg_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_.h")
-    list(APPEND _generated_external_msg_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_.cxx")
-    list(APPEND _generated_external_msg_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_Plugin.h")
-    list(APPEND _generated_external_msg_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_Plugin.cxx")
-    list(APPEND _generated_external_msg_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_Support.h")
-    list(APPEND _generated_external_msg_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_Support.cxx")
-    list(APPEND _generated_msg_files "${_output_path}/msg/${_header_name}__rosidl_typesupport_connext_c.h")
-    list(APPEND _generated_msg_files "${_output_path}/msg/dds_connext_c/${_header_name}__type_support_c.cpp")
+    list(APPEND _generated_external_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_.h")
+    list(APPEND _generated_external_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_.cxx")
+    list(APPEND _generated_external_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_Plugin.h")
+    list(APPEND _generated_external_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_Plugin.cxx")
+    list(APPEND _generated_external_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_Support.h")
+    list(APPEND _generated_external_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_Support.cxx")
+    list(APPEND _generated_files "${_output_path}/msg/${_header_name}__rosidl_typesupport_connext_c.h")
+    list(APPEND _generated_files "${_output_path}/msg/dds_connext_c/${_header_name}__type_support_c.cpp")
   elseif(_extension STREQUAL ".srv")
-    list(APPEND _generated_srv_files "${_output_path}/srv/${_header_name}__rosidl_typesupport_connext_c.h")
-    list(APPEND _generated_srv_files "${_output_path}/srv/dds_connext_c/${_header_name}__type_support_c.cpp")
-    list(APPEND _generated_srv_files "${_output_path}/srv/dds_connext_c/${_header_name}__request__type_support_c.cpp")
-    list(APPEND _generated_srv_files "${_output_path}/srv/dds_connext_c/${_header_name}__response__type_support_c.cpp")
+    list(APPEND _generated_files "${_output_path}/${_parent_folder}/${_header_name}__rosidl_typesupport_connext_c.h")
+    list(APPEND _generated_files "${_output_path}/${_parent_folder}/dds_connext_c/${_header_name}__type_support_c.cpp")
+    list(APPEND _generated_files "${_output_path}/${_parent_folder}/dds_connext_c/${_header_name}__request__type_support_c.cpp")
+    list(APPEND _generated_files "${_output_path}/${_parent_folder}/dds_connext_c/${_header_name}__response__type_support_c.cpp")
   else()
     message(FATAL_ERROR "Interface file with unknown extension: ${_idl_file}")
   endif()
@@ -85,7 +83,7 @@ if(NOT WIN32)
   endif()
   if(NOT _connext_compile_flags STREQUAL "")
     string(REPLACE ";" " " _connext_compile_flags "${_connext_compile_flags}")
-    foreach(_gen_file ${_generated_external_msg_files})
+    foreach(_gen_file ${_generated_external_files})
       set_source_files_properties("${_gen_file}"
         PROPERTIES COMPILE_FLAGS "${_connext_compile_flags}")
     endforeach()
@@ -136,13 +134,12 @@ rosidl_write_generator_arguments(
 )
 
 add_custom_command(
-  OUTPUT ${_generated_msg_files} ${_generated_srv_files}
+  OUTPUT ${_generated_files}
   COMMAND ${PYTHON_EXECUTABLE} ${rosidl_typesupport_connext_c_BIN}
   --generator-arguments-file "${generator_arguments_file}"
   DEPENDS
     ${target_dependencies}
-    ${generated_external_msg_files}
-    ${generated_external_srv_files}
+    ${generated_external_files}
     ${_dds_idl_files}
   COMMENT "Generating C type support for RTI Connext"
   VERBATIM
@@ -162,8 +159,7 @@ set(_target_suffix "__rosidl_typesupport_connext_c")
 
 link_directories(${Connext_LIBRARY_DIRS})
 add_library(${rosidl_generate_interfaces_TARGET}${_target_suffix} SHARED
-  ${_generated_msg_files} ${_generated_external_msg_files} ${_generated_srv_files}
-  ${_generated_external_srv_files})
+  ${_generated_files} ${_generated_external_files})
 if(rosidl_generate_interfaces_LIBRARY_NAME)
   set_target_properties(${rosidl_generate_interfaces_TARGET}${_target_suffix}
     PROPERTIES OUTPUT_NAME "${rosidl_generate_interfaces_LIBRARY_NAME}${_target_suffix}")
@@ -256,7 +252,7 @@ if(NOT rosidl_generate_interfaces_SKIP_INSTALL)
     PATTERN "*.cpp" EXCLUDE
   )
 
-  if(NOT _generated_msg_files STREQUAL "" OR NOT _generated_srv_files STREQUAL "")
+  if(NOT _generated_files STREQUAL "")
     ament_export_include_directories(include)
   endif()
 
@@ -272,11 +268,11 @@ if(NOT rosidl_generate_interfaces_SKIP_INSTALL)
 endif()
 
 if(BUILD_TESTING AND rosidl_generate_interfaces_ADD_LINTER_TESTS)
-  if(NOT _generated_msg_files STREQUAL "" OR NOT _generated_srv_files STREQUAL "")
+  if(NOT _generated_files STREQUAL "")
     find_package(ament_cmake_cppcheck REQUIRED)
     ament_cppcheck(
       TESTNAME "cppcheck_rosidl_typesupport_connext_c"
-      ${_generated_msg_files} ${_generated_srv_files})
+      ${_generated_files})
 
     find_package(ament_cmake_cpplint REQUIRED)
     get_filename_component(_cpplint_root "${_output_path}" DIRECTORY)
@@ -285,13 +281,13 @@ if(BUILD_TESTING AND rosidl_generate_interfaces_ADD_LINTER_TESTS)
       # the generated code might contain longer lines for templated types
       MAX_LINE_LENGTH 999
       ROOT "${_cpplint_root}"
-      ${_generated_msg_files} ${_generated_srv_files})
+      ${_generated_files})
 
     find_package(ament_cmake_uncrustify REQUIRED)
     ament_uncrustify(
       TESTNAME "uncrustify_rosidl_typesupport_connext_c"
       # the generated code might contain longer lines for templated types
       MAX_LINE_LENGTH 999
-      ${_generated_msg_files} ${_generated_srv_files})
+      ${_generated_files})
   endif()
 endif()
