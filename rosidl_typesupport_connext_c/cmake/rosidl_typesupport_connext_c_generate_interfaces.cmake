@@ -47,15 +47,23 @@ foreach(_idl_file ${rosidl_generate_interfaces_IDL_FILES})
   if(_extension STREQUAL ".msg" AND _msg_name MATCHES "Response$|Request$")
     # Don't do anything
   elseif(_extension STREQUAL ".msg")
+    set(_allowed_parent_folders "msg" "srv" "action")
+    if(NOT _parent_folder IN_LIST _allowed_parent_folders)
+      message(FATAL_ERROR "Interface file with unknown parent folder: ${_idl_file}")
+    endif()
     list(APPEND _generated_external_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_.h")
     list(APPEND _generated_external_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_.cxx")
     list(APPEND _generated_external_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_Plugin.h")
     list(APPEND _generated_external_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_Plugin.cxx")
     list(APPEND _generated_external_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_Support.h")
     list(APPEND _generated_external_files "${_dds_output_path}/${_parent_folder}/dds_connext/${_msg_name}_Support.cxx")
-    list(APPEND _generated_files "${_output_path}/msg/${_header_name}__rosidl_typesupport_connext_c.h")
-    list(APPEND _generated_files "${_output_path}/msg/dds_connext_c/${_header_name}__type_support_c.cpp")
+    list(APPEND _generated_files "${_output_path}/${_parent_folder}/${_header_name}__rosidl_typesupport_connext_c.h")
+    list(APPEND _generated_files "${_output_path}/${_parent_folder}/dds_connext_c/${_header_name}__type_support_c.cpp")
   elseif(_extension STREQUAL ".srv")
+    set(_allowed_parent_folders "srv" "action")
+    if(NOT _parent_folder IN_LIST _allowed_parent_folders)
+      message(FATAL_ERROR "Interface file with unknown parent folder: ${_idl_file}")
+    endif()
     list(APPEND _generated_files "${_output_path}/${_parent_folder}/${_header_name}__rosidl_typesupport_connext_c.h")
     list(APPEND _generated_files "${_output_path}/${_parent_folder}/dds_connext_c/${_header_name}__type_support_c.cpp")
     list(APPEND _generated_files "${_output_path}/${_parent_folder}/dds_connext_c/${_header_name}__request__type_support_c.cpp")
@@ -212,12 +220,15 @@ ament_target_dependencies(${rosidl_generate_interfaces_TARGET}${_target_suffix}
 foreach(_pkg_name ${rosidl_generate_interfaces_DEPENDENCY_PACKAGE_NAMES})
   set(_msg_include_dir "${${_pkg_name}_DIR}/../../../include/${_pkg_name}/msg/dds_connext_c")
   set(_srv_include_dir "${${_pkg_name}_DIR}/../../../include/${_pkg_name}/srv/dds_connext_c")
+  set(_action_include_dir "${${_pkg_name}_DIR}/../../../include/${_pkg_name}/action/dds_connext_c")
   normalize_path(_msg_include_dir "${_msg_include_dir}")
   normalize_path(_srv_include_dir "${_srv_include_dir}")
+  normalize_path(_action_include_dir "${_action_include_dir}")
   target_include_directories(${rosidl_generate_interfaces_TARGET}${_target_suffix}
     PUBLIC
     "${_msg_include_dir}"
     "${_srv_include_dir}"
+    "${_action_include_dir}"
   )
   ament_target_dependencies(${rosidl_generate_interfaces_TARGET}${_target_suffix}
     ${_pkg_name})
