@@ -7,10 +7,13 @@
 @# Context:
 @#  - spec (rosidl_parser.ServiceSpecification)
 @#    Parsed specification of the .srv file
+@#  - subfolder (string)
+@#    The subfolder / subnamespace of the message
+@#    Either 'srv' or 'action'
 @#  - get_header_filename_from_msg_name (function)
 @#######################################################################
 @
-#include "@(spec.pkg_name)/srv/@(get_header_filename_from_msg_name(spec.srv_name))__rosidl_typesupport_connext_c.h"
+#include "@(spec.pkg_name)/@(subfolder)/@(get_header_filename_from_msg_name(spec.srv_name))__rosidl_typesupport_connext_c.h"
 
 #ifdef Connext_GLIBCXX_USE_CXX11_ABI_ZERO
 #define _GLIBCXX_USE_CXX11_ABI 0
@@ -44,16 +47,16 @@
 #include "@(spec.pkg_name)/msg/rosidl_typesupport_connext_c__visibility_control.h"
 @{req_header_file_name = get_header_filename_from_msg_name(spec.srv_name + '__request')}@
 @{res_header_file_name = get_header_filename_from_msg_name(spec.srv_name + '__response')}@
-#include "@(spec.pkg_name)/srv/@(req_header_file_name).h"
-#include "@(spec.pkg_name)/srv/@(res_header_file_name).h"
+#include "@(spec.pkg_name)/@(subfolder)/@(req_header_file_name).h"
+#include "@(spec.pkg_name)/@(subfolder)/@(res_header_file_name).h"
 
-#include "@(spec.pkg_name)/srv/dds_connext/@(spec.srv_name)_Request_Support.h"
-#include "@(spec.pkg_name)/srv/@(get_header_filename_from_msg_name(spec.srv_name + '_Request'))__rosidl_typesupport_connext_c.h"
-#include "@(spec.pkg_name)/srv/dds_connext/@(spec.srv_name)_Response_Support.h"
-#include "@(spec.pkg_name)/srv/@(get_header_filename_from_msg_name(spec.srv_name + '_Response'))__rosidl_typesupport_connext_c.h"
+#include "@(spec.pkg_name)/@(subfolder)/dds_connext/@(spec.srv_name)_Request_Support.h"
+#include "@(spec.pkg_name)/@(subfolder)/@(get_header_filename_from_msg_name(spec.srv_name + '_Request'))__rosidl_typesupport_connext_c.h"
+#include "@(spec.pkg_name)/@(subfolder)/dds_connext/@(spec.srv_name)_Response_Support.h"
+#include "@(spec.pkg_name)/@(subfolder)/@(get_header_filename_from_msg_name(spec.srv_name + '_Response'))__rosidl_typesupport_connext_c.h"
 
 // Re-use most of the functions from C++ typesupport
-#include "@(spec.pkg_name)/srv/@(get_header_filename_from_msg_name(spec.srv_name))__rosidl_typesupport_connext_cpp.hpp"
+#include "@(spec.pkg_name)/@(subfolder)/@(get_header_filename_from_msg_name(spec.srv_name))__rosidl_typesupport_connext_cpp.hpp"
 
 class DDSDomainParticipant;
 class DDSDataReader;
@@ -66,11 +69,11 @@ extern "C"
 
 // forward declare type support functions
 const rosidl_message_type_support_t *
-  ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_connext_c, @(spec.pkg_name), srv, @(spec.srv_name)_Request)();
+  ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_connext_c, @(spec.pkg_name), @(subfolder), @(spec.srv_name)_Request)();
 const rosidl_message_type_support_t *
-  ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_connext_c, @(spec.pkg_name), srv, @(spec.srv_name)_Response)();
+  ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_connext_c, @(spec.pkg_name), @(subfolder), @(spec.srv_name)_Response)();
 
-void * create_requester__@(spec.srv_name)(
+void * create_requester__@(subfolder)__@(spec.srv_name)(
   void * untyped_participant,
   const char * request_topic_str,
   const char * response_topic_str,
@@ -80,7 +83,7 @@ void * create_requester__@(spec.srv_name)(
   void ** untyped_writer,
   void * (*allocator)(size_t))
 {
-  return @(spec.pkg_name)::srv::typesupport_connext_cpp::create_requester__@(spec.srv_name)(
+  return @(spec.pkg_name)::@(subfolder)::typesupport_connext_cpp::create_requester__@(spec.srv_name)(
     untyped_participant,
     request_topic_str,
     response_topic_str,
@@ -90,26 +93,26 @@ void * create_requester__@(spec.srv_name)(
     untyped_writer,
     allocator);
 }
-const char * destroy_requester__@(spec.srv_name)(
+const char * destroy_requester__@(subfolder)__@(spec.srv_name)(
   void * untyped_requester,
   void (* deallocator)(void *))
 {
-  return @(spec.pkg_name)::srv::typesupport_connext_cpp::destroy_requester__@(spec.srv_name)(
+  return @(spec.pkg_name)::@(subfolder)::typesupport_connext_cpp::destroy_requester__@(spec.srv_name)(
     untyped_requester, deallocator);
 }
 
-int64_t send_request__@(spec.srv_name)(
+int64_t send_request__@(subfolder)__@(spec.srv_name)(
   void * untyped_requester,
   const void * untyped_ros_request)
 {
   using RequesterType = connext::Requester<
-    @(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Request_,
-    @(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Response_
+    @(spec.pkg_name)::@(subfolder)::dds_::@(spec.srv_name)_Request_,
+    @(spec.pkg_name)::@(subfolder)::dds_::@(spec.srv_name)_Response_
   >;
   connext::WriteSample<
-    @(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Request_> request;
+    @(spec.pkg_name)::@(subfolder)::dds_::@(spec.srv_name)_Request_> request;
   const rosidl_message_type_support_t * ts =
-    ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_connext_c, @(spec.pkg_name), srv, @(spec.srv_name)_Request)();
+    ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_connext_c, @(spec.pkg_name), @(subfolder), @(spec.srv_name)_Request)();
   const message_type_support_callbacks_t * callbacks =
     static_cast<const message_type_support_callbacks_t *>(ts->data);
   bool converted = callbacks->convert_ros_to_dds(
@@ -127,7 +130,7 @@ int64_t send_request__@(spec.srv_name)(
   return sequence_number;
 }
 
-void * create_replier__@(spec.srv_name)(
+void * create_replier__@(subfolder)__@(spec.srv_name)(
   void * untyped_participant,
   const char * request_topic_str,
   const char * response_topic_str,
@@ -137,7 +140,7 @@ void * create_replier__@(spec.srv_name)(
   void ** untyped_writer,
   void * (*allocator)(size_t))
 {
-  return @(spec.pkg_name)::srv::typesupport_connext_cpp::create_replier__@(spec.srv_name)(
+  return @(spec.pkg_name)::@(subfolder)::typesupport_connext_cpp::create_replier__@(spec.srv_name)(
     untyped_participant,
     request_topic_str,
     response_topic_str,
@@ -148,22 +151,22 @@ void * create_replier__@(spec.srv_name)(
     allocator);
 }
 
-const char * destroy_replier__@(spec.srv_name)(
+const char * destroy_replier__@(subfolder)__@(spec.srv_name)(
   void * untyped_replier,
   void (* deallocator)(void *))
 {
-  return @(spec.pkg_name)::srv::typesupport_connext_cpp::destroy_replier__@(spec.srv_name)(
+  return @(spec.pkg_name)::@(subfolder)::typesupport_connext_cpp::destroy_replier__@(spec.srv_name)(
     untyped_replier, deallocator);
 }
 
-bool take_request__@(spec.srv_name)(
+bool take_request__@(subfolder)__@(spec.srv_name)(
   void * untyped_replier,
   rmw_request_id_t * request_header,
   void * untyped_ros_request)
 {
   using ReplierType = connext::Replier<
-    @(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Request_,
-    @(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Response_
+    @(spec.pkg_name)::@(subfolder)::dds_::@(spec.srv_name)_Request_,
+    @(spec.pkg_name)::@(subfolder)::dds_::@(spec.srv_name)_Response_
   >;
   if (!untyped_replier || !request_header || !untyped_ros_request) {
     return false;
@@ -171,7 +174,7 @@ bool take_request__@(spec.srv_name)(
 
   ReplierType * replier = reinterpret_cast<ReplierType *>(untyped_replier);
 
-  connext::Sample<@(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Request_> request;
+  connext::Sample<@(spec.pkg_name)::@(subfolder)::dds_::@(spec.srv_name)_Request_> request;
   bool taken = replier->take_request(request);
   if (!taken) {
     return false;
@@ -181,7 +184,7 @@ bool take_request__@(spec.srv_name)(
   }
 
   const rosidl_message_type_support_t * ts =
-    ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_connext_c, @(spec.pkg_name), srv, @(spec.srv_name)_Request)();
+    ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_connext_c, @(spec.pkg_name), @(subfolder), @(spec.srv_name)_Request)();
   const message_type_support_callbacks_t * callbacks =
     static_cast<const message_type_support_callbacks_t *>(ts->data);
   bool converted = callbacks->convert_dds_to_ros(
@@ -197,19 +200,19 @@ bool take_request__@(spec.srv_name)(
   return true;
 }
 
-bool take_response__@(spec.srv_name)(
+bool take_response__@(subfolder)__@(spec.srv_name)(
   void * untyped_requester,
   rmw_request_id_t * request_header,
   void * untyped_ros_response)
 {
-  using RequesterType = connext::Requester<@(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Request_, @(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Response_>;
+  using RequesterType = connext::Requester<@(spec.pkg_name)::@(subfolder)::dds_::@(spec.srv_name)_Request_, @(spec.pkg_name)::@(subfolder)::dds_::@(spec.srv_name)_Response_>;
   if (!untyped_requester || !request_header || !untyped_ros_response) {
     return false;
   }
 
   RequesterType * requester = reinterpret_cast<RequesterType *>(untyped_requester);
 
-  connext::Sample<@(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Response_> response;
+  connext::Sample<@(spec.pkg_name)::@(subfolder)::dds_::@(spec.srv_name)_Response_> response;
   bool received = requester->take_reply(response);
   if (!received) {
     return false;
@@ -224,7 +227,7 @@ bool take_response__@(spec.srv_name)(
   request_header->sequence_number = sequence_number;
 
   const rosidl_message_type_support_t * ts =
-    ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_connext_c, @(spec.pkg_name), srv, @(spec.srv_name)_Response)();
+    ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_connext_c, @(spec.pkg_name), @(subfolder), @(spec.srv_name)_Response)();
   const message_type_support_callbacks_t * callbacks =
     static_cast<const message_type_support_callbacks_t *>(ts->data);
   bool converted = callbacks->convert_dds_to_ros(
@@ -232,19 +235,19 @@ bool take_response__@(spec.srv_name)(
   return converted;
 }
 
-bool send_response__@(spec.srv_name)(
+bool send_response__@(subfolder)__@(spec.srv_name)(
   void * untyped_replier,
   const rmw_request_id_t * request_header,
   const void * untyped_ros_response)
 {
-  using ReplierType = connext::Replier<@(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Request_, @(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Response_>;
+  using ReplierType = connext::Replier<@(spec.pkg_name)::@(subfolder)::dds_::@(spec.srv_name)_Request_, @(spec.pkg_name)::@(subfolder)::dds_::@(spec.srv_name)_Response_>;
   if (!untyped_replier || !request_header || !untyped_ros_response) {
     return false;
   }
 
-  connext::WriteSample<@(spec.pkg_name)::srv::dds_::@(spec.srv_name)_Response_> response;
+  connext::WriteSample<@(spec.pkg_name)::@(subfolder)::dds_::@(spec.srv_name)_Response_> response;
   const rosidl_message_type_support_t * ts =
-    ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_connext_c, @(spec.pkg_name), srv, @(spec.srv_name)_Response)();
+    ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_connext_c, @(spec.pkg_name), @(subfolder), @(spec.srv_name)_Response)();
   const message_type_support_callbacks_t * callbacks =
     static_cast<const message_type_support_callbacks_t *>(ts->data);
   bool converted = callbacks->convert_ros_to_dds(
@@ -268,48 +271,48 @@ bool send_response__@(spec.srv_name)(
 }
 
 void *
-get_request_datawriter__@(spec.srv_name)(void * untyped_requester)
+get_request_datawriter__@(subfolder)__@(spec.srv_name)(void * untyped_requester)
 {
-  return @(spec.pkg_name)::srv::typesupport_connext_cpp::get_request_datawriter__@(spec.srv_name)(
+  return @(spec.pkg_name)::@(subfolder)::typesupport_connext_cpp::get_request_datawriter__@(spec.srv_name)(
     untyped_requester);
 }
 
 void *
-get_reply_datareader__@(spec.srv_name)(void * untyped_requester)
+get_reply_datareader__@(subfolder)__@(spec.srv_name)(void * untyped_requester)
 {
-  return @(spec.pkg_name)::srv::typesupport_connext_cpp::get_reply_datareader__@(spec.srv_name)(
+  return @(spec.pkg_name)::@(subfolder)::typesupport_connext_cpp::get_reply_datareader__@(spec.srv_name)(
     untyped_requester);
 }
 
 void *
-get_request_datareader__@(spec.srv_name)(void * untyped_replier)
+get_request_datareader__@(subfolder)__@(spec.srv_name)(void * untyped_replier)
 {
-  return @(spec.pkg_name)::srv::typesupport_connext_cpp::get_request_datareader__@(spec.srv_name)(
+  return @(spec.pkg_name)::@(subfolder)::typesupport_connext_cpp::get_request_datareader__@(spec.srv_name)(
     untyped_replier);
 }
 
 void *
-get_reply_datawriter__@(spec.srv_name)(void * untyped_replier)
+get_reply_datawriter__@(subfolder)__@(spec.srv_name)(void * untyped_replier)
 {
-  return @(spec.pkg_name)::srv::typesupport_connext_cpp::get_reply_datawriter__@(spec.srv_name)(
+  return @(spec.pkg_name)::@(subfolder)::typesupport_connext_cpp::get_reply_datawriter__@(spec.srv_name)(
     untyped_replier);
 }
 
 static service_type_support_callbacks_t __callbacks = {
   "@(spec.pkg_name)",
   "@(spec.srv_name)",
-  &create_requester__@(spec.srv_name),
-  &destroy_requester__@(spec.srv_name),
-  &create_replier__@(spec.srv_name),
-  &destroy_replier__@(spec.srv_name),
-  &send_request__@(spec.srv_name),
-  &take_request__@(spec.srv_name),
-  &send_response__@(spec.srv_name),
-  &take_response__@(spec.srv_name),
-  &get_request_datawriter__@(spec.srv_name),
-  &get_reply_datareader__@(spec.srv_name),
-  &get_request_datareader__@(spec.srv_name),
-  &get_reply_datawriter__@(spec.srv_name),
+  &create_requester__@(subfolder)__@(spec.srv_name),
+  &destroy_requester__@(subfolder)__@(spec.srv_name),
+  &create_replier__@(subfolder)__@(spec.srv_name),
+  &destroy_replier__@(subfolder)__@(spec.srv_name),
+  &send_request__@(subfolder)__@(spec.srv_name),
+  &take_request__@(subfolder)__@(spec.srv_name),
+  &send_response__@(subfolder)__@(spec.srv_name),
+  &take_response__@(subfolder)__@(spec.srv_name),
+  &get_request_datawriter__@(subfolder)__@(spec.srv_name),
+  &get_reply_datareader__@(subfolder)__@(spec.srv_name),
+  &get_request_datareader__@(subfolder)__@(spec.srv_name),
+  &get_reply_datawriter__@(subfolder)__@(spec.srv_name),
 };
 
 static rosidl_service_type_support_t __type_support = {
@@ -320,7 +323,7 @@ static rosidl_service_type_support_t __type_support = {
 
 
 const rosidl_service_type_support_t *
-ROSIDL_TYPESUPPORT_INTERFACE__SERVICE_SYMBOL_NAME(rosidl_typesupport_connext_c, @(spec.pkg_name), @(spec.srv_name))() {
+ROSIDL_TYPESUPPORT_INTERFACE__SERVICE_SYMBOL_NAME(rosidl_typesupport_connext_c, @(spec.pkg_name), @(subfolder), @(spec.srv_name))() {
   return &__type_support;
 }
 
