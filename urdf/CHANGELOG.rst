@@ -2,6 +2,11 @@
 Changelog for package urdf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.2.0 (2018-11-20)
+------------------
+* Update to remove unneeded console_bridge dependency. (`#4 <https://github.com/ros2/urdf/issues/4>`_)
+* Contributors: Mikael Arguedas
+
 2.1.0 (2018-06-25)
 ------------------
 * Update project URLs (`#2 <https://github.com/ros2/urdf/issues/2>`_)
