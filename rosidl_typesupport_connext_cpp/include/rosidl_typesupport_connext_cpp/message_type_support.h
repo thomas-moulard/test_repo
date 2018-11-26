@@ -15,9 +15,9 @@
 #ifndef ROSIDL_TYPESUPPORT_CONNEXT_CPP__MESSAGE_TYPE_SUPPORT_H_
 #define ROSIDL_TYPESUPPORT_CONNEXT_CPP__MESSAGE_TYPE_SUPPORT_H_
 
-#include "rosidl_generator_c/message_type_support_struct.h"
+#include "rcutils/types/uint8_array.h"
 
-#include "rosidl_typesupport_connext_cpp/connext_static_cdr_stream.hpp"
+#include "rosidl_generator_c/message_type_support_struct.h"
 
 // forward declare DDS_TypeCode
 struct DDS_TypeCode;
@@ -37,10 +37,10 @@ typedef struct message_type_support_callbacks_t
   // Function to serialize a ROS message to a CDR stream
   bool (* to_cdr_stream)(
     const void * untyped_ros_message,
-    ConnextStaticCDRStream * cdr_stream);
+    rcutils_uint8_array_t * cdr_stream);
   // Function to deserialize a CDR message to a ROS message
   bool (* to_message)(
-    const ConnextStaticCDRStream * cdr_stream,
+    const rcutils_uint8_array_t * cdr_stream,
     void * untyped_ros_message);
 } message_type_support_callbacks_t;
 

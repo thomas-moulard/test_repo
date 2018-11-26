@@ -18,9 +18,10 @@
 #include <limits>
 #include <stdexcept>
 
+#include "rcutils/types/uint8_array.h"
+
 #include "rosidl_typesupport_cpp/message_type_support.hpp"
 
-#include "rosidl_typesupport_connext_cpp/connext_static_cdr_stream.hpp"
 #include "rosidl_typesupport_connext_cpp/identifier.hpp"
 #include "rosidl_typesupport_connext_cpp/message_type_support.h"
 #include "rosidl_typesupport_connext_cpp/message_type_support_decl.hpp"
@@ -195,7 +196,7 @@ convert_dds_message_to_ros(
 bool
 to_cdr_stream__@(spec.base_type.type)(
   const void * untyped_ros_message,
-  ConnextStaticCDRStream * cdr_stream)
+  rcutils_uint8_array_t * cdr_stream)
 {
   if (!cdr_stream) {
     return false;
@@ -236,12 +237,12 @@ to_cdr_stream__@(spec.base_type.type)(
   }
   if (cdr_stream->buffer_capacity < cdr_stream->buffer_length) {
     cdr_stream->allocator.deallocate(cdr_stream->buffer, cdr_stream->allocator.state);
-    cdr_stream->buffer = static_cast<char *>(cdr_stream->allocator.allocate(cdr_stream->buffer_length, cdr_stream->allocator.state));
+    cdr_stream->buffer = static_cast<uint8_t *>(cdr_stream->allocator.allocate(cdr_stream->buffer_length, cdr_stream->allocator.state));
   }
   // call the function again and fill the buffer this time
   unsigned int buffer_length_uint = static_cast<unsigned int>(cdr_stream->buffer_length);
   if (@(spec.base_type.type)_Plugin_serialize_to_cdr_buffer(
-      cdr_stream->buffer,
+      reinterpret_cast<char *>(cdr_stream->buffer),
       &buffer_length_uint,
       dds_message) != RTI_TRUE)
   {
@@ -255,7 +256,7 @@ to_cdr_stream__@(spec.base_type.type)(
 
 bool
 to_message__@(spec.base_type.type)(
-  const ConnextStaticCDRStream * cdr_stream,
+  const rcutils_uint8_array_t * cdr_stream,
   void * untyped_ros_message)
 {
   if (!cdr_stream) {
@@ -276,7 +277,7 @@ to_message__@(spec.base_type.type)(
   }
   if (@(spec.base_type.type)_Plugin_deserialize_from_cdr_buffer(
       dds_message,
-      cdr_stream->buffer,
+      reinterpret_cast<char *>(cdr_stream->buffer),
       static_cast<unsigned int>(cdr_stream->buffer_length)) != RTI_TRUE)
   {
     fprintf(stderr, "deserialize from cdr buffer failed\n");
