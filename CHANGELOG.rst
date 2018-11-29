@@ -2,6 +2,13 @@
 Changelog for package yaml_cpp_vendor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Renaming rviz_yaml_cpp_vendor to yaml_cpp_vendor (`#1 <https://github.com/ros2/yaml_cpp_vendor/issues/1>`_)
+  * Change names from rviz_yaml_cpp to yaml_cpp.
+* use latest yamlcpp commit to fix compilation with vc15.8.1 (`#353 <https://github.com/ros2/yaml_cpp_vendor/issues/353>`_)
+* Contributors: Michael Carroll, Mikael Arguedas
+
 4.0.1 (2018-06-28)
 ------------------
 
