@@ -1,0 +1,48 @@
+# generated from test_rclcpp/test/test_two_executables.py.in
+
+import os
+
+from launch.legacy import LaunchDescriptor
+from launch.legacy.exit_handler import primary_exit_handler
+from launch.legacy.launcher import DefaultLauncher
+
+
+def @TEST_NAME@():
+    ld = LaunchDescriptor()
+
+    cmd = ['@TEST_EXECUTABLE1@']
+    if '@TEST_EXECUTABLE1_ARGS@':
+      cmd += '@TEST_EXECUTABLE1_ARGS@'.split(' ')
+    env = None
+    if '@TEST_RMW_IMPLEMENTATION1@':
+        env = dict(os.environ)
+        env['RMW_IMPLEMENTATION'] = '@TEST_RMW_IMPLEMENTATION1@'
+    ld.add_process(
+        cmd=cmd,
+        name='@TEST_EXECUTABLE1_NAME@',
+        env=env,
+    )
+
+    cmd = ['@TEST_EXECUTABLE2@']
+    if '@TEST_EXECUTABLE2_ARGS@':
+      cmd += '@TEST_EXECUTABLE2_ARGS@'.split(' ')
+    env = None
+    if '@TEST_RMW_IMPLEMENTATION2@':
+        env = dict(os.environ)
+        env['RMW_IMPLEMENTATION'] = '@TEST_RMW_IMPLEMENTATION2@'
+    ld.add_process(
+        cmd=cmd,
+        name='@TEST_EXECUTABLE2_NAME@',
+        env=env,
+        exit_handler=primary_exit_handler,
+    )
+
+    launcher = DefaultLauncher()
+    launcher.add_launch_descriptor(ld)
+    rc = launcher.launch()
+
+    assert rc == 0, "The launch file failed with exit code '" + str(rc) + "'. "
+
+
+if __name__ == '__main__':
+    @TEST_NAME@()
