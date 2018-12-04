@@ -1,0 +1,32 @@
+# generated from rcl/test/test_two_executables.py.in
+
+from launch.legacy import LaunchDescriptor
+from launch.legacy.exit_handler import ignore_signal_exit_handler
+from launch.legacy.exit_handler import primary_exit_handler
+from launch.legacy.launcher import DefaultLauncher
+
+
+def @TEST_NAME@():
+    ld = LaunchDescriptor()
+
+    ld.add_process(
+        cmd=['@TEST_EXECUTABLE1@'],
+        name='@TEST_EXECUTABLE1_NAME@',
+        exit_handler=ignore_signal_exit_handler,
+    )
+
+    ld.add_process(
+        cmd=['@TEST_EXECUTABLE2@', '@TEST_EXECUTABLE1_NAME@'],
+        name='@TEST_EXECUTABLE2_NAME@',
+        exit_handler=primary_exit_handler,
+    )
+
+    launcher = DefaultLauncher()
+    launcher.add_launch_descriptor(ld)
+    rc = launcher.launch()
+
+    assert rc == 0, "The launch file failed with exit code '" + str(rc) + "'. "
+
+
+if __name__ == '__main__':
+    @TEST_NAME@()
